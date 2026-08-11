@@ -1,0 +1,42 @@
+name: Auto Create Page From Web Form
+
+on:
+  issues:
+    types: [opened]
+
+permissions:
+  contents: write
+  issues: write
+
+jobs:
+  create-page:
+    if: contains(github.event.issue.title, '[NEW_PAGE]')
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Run Generation Script
+        env:
+          ISSUE_BODY: ${{ github.event.issue.body }}
+        run: node generate.js
+
+      - name: Commit and Save Changes
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add data.json *.html
+          git commit -m "Created page for issue #${{ github.event.issue.number }}" || exit 0
+          git push
+
+      - name: Close Issue Automatically
+        run: |
+          gh issue close ${{ github.event.issue.number }} --comment "Done! Page successfully generated."
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
