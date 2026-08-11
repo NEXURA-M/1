@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page Creator</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f0f2f5; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .card { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 360px; }
+        h2 { text-align: center; color: #1a1a1a; margin-top: 0; }
+        .input-group { margin-bottom: 15px; }
+        label { display: block; font-size: 14px; color: #666; margin-bottom: 5px; }
+        input { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; font-size: 14px; }
+        button { width: 100%; padding: 12px; background: #007bff; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 16px; font-weight: bold; }
+        button:hover { background: #0056b3; }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h2>Naya Page Banayein</h2>
+    <div class="input-group">
+        <label>Page Ka Naam:</label>
+        <input type="text" id="name" placeholder="e.g. My Custom Page" required />
+    </div>
+    <div class="input-group">
+        <label>Website Link:</label>
+        <input type="url" id="link" placeholder="https://example.com" required />
+    </div>
+    <button onclick="submitToGitHub()">Submit Karein</button>
+</div>
+
+<script>
+function submitToGitHub() {
+    const name = document.getElementById('name').value.trim();
+    const link = document.getElementById('link').value.trim();
+
+    if(!name || !link) {
+        alert("Name aur Link dono likhna zaroori hain!");
+        return;
+    }
+
+    const username = "NEXURA-M"; 
+    const repo = "1";
+
+    const issueTitle = encodeURIComponent(`[NEW_PAGE] ${name}`);
+    const issueBody = encodeURIComponent(`Name: ${name}\nLink: ${link}`);
+
+    // Redirect to pre-filled GitHub issue page
+    const githubUrl = `https://github.com/${username}/${repo}/issues/new?title=${issueTitle}&body=${issueBody}`;
+    
+    window.location.href = githubUrl;
+}
+</script>
+
+</body>
+</html>
