@@ -3,9 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Free Laptop & Bike Scheme</title>
+  <title>Free Laptop & Bike Scheme (P2P Enabled)</title>
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Gun.js P2P Library CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/gun/gun.js"></script>
   <style>
     body { font-family: 'Inter', sans-serif; }
   </style>
@@ -15,7 +17,7 @@
   <!-- Header -->
   <header class="bg-slate-800 border-b border-slate-700 p-4 text-center shadow-lg">
     <h1 class="text-2xl font-bold text-emerald-400 cursor-pointer" onclick="showSelection()">Prime Welfare Scheme 2026</h1>
-    <p class="text-slate-400 text-sm mt-1">Apply for Free Laptop & Free Bike Program</p>
+    <p class="text-slate-400 text-sm mt-1">Apply for Free Laptop & Free Bike Program (P2P Mesh Network)</p>
   </header>
 
   <!-- Main Container -->
@@ -39,11 +41,20 @@
           <span class="text-xs bg-cyan-500/20 text-cyan-300 px-2 py-1 rounded mt-2">(FREE)</span>
         </button>
       </div>
+
+      <!-- Live Search Box for Searching Any User ID -->
+      <div class="bg-slate-800 p-4 rounded-xl border border-slate-700 mt-6 text-left">
+        <label class="block text-xs text-slate-400 mb-2">Search Any Reference ID Across Network:</label>
+        <div class="flex gap-2">
+          <input type="text" id="search-id-input" placeholder="Enter 5-letter ID (e.g. A1B2C)" class="w-full bg-slate-900 border border-slate-700 rounded p-2 text-sm uppercase text-amber-400 font-mono focus:border-emerald-500 outline-none">
+          <button onclick="searchID()" class="bg-emerald-600 hover:bg-emerald-500 px-4 py-2 rounded text-xs font-bold">Search</button>
+        </div>
+      </div>
       
       <!-- Export JSON File Button -->
       <div class="mt-8 pt-6 border-t border-slate-800">
         <button onclick="downloadJSON()" class="text-xs text-slate-400 hover:text-white underline">
-          📥 Download data.json Archive
+          📥 Download Synced Network data.json
         </button>
       </div>
     </div>
@@ -73,7 +84,7 @@
 
         <div>
           <label class="block text-xs text-slate-400 mb-1">Computer Specialist / Program</label>
-          <input type="text" id="laptop-program" placeholder="e.g. Web Development, AI Development, or any custom program" required class="w-full bg-slate-900 border border-slate-700 rounded p-2 text-sm focus:border-emerald-500 outline-none">
+          <input type="text" id="laptop-program" placeholder="e.g. Web Development, AI Development" required class="w-full bg-slate-900 border border-slate-700 rounded p-2 text-sm focus:border-emerald-500 outline-none">
         </div>
 
         <div>
@@ -87,7 +98,7 @@
           <input type="text" id="laptop-msid" placeholder="Transaction TRX / MSID" required class="w-full bg-slate-900 border border-slate-700 rounded p-2 text-sm focus:border-emerald-500 outline-none">
         </div>
 
-        <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-500 font-bold py-2.5 rounded text-sm transition">SAVE & GENERATE ID</button>
+        <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-500 font-bold py-2.5 rounded text-sm transition">SAVE & SYNC TO NETWORK</button>
       </form>
     </div>
 
@@ -120,14 +131,14 @@
           <input type="text" id="bike-msid" placeholder="Transaction TRX / MSID" required class="w-full bg-slate-900 border border-slate-700 rounded p-2 text-sm focus:border-cyan-500 outline-none">
         </div>
 
-        <button type="submit" class="w-full bg-cyan-600 hover:bg-cyan-500 font-bold py-2.5 rounded text-sm transition">SAVE & GENERATE ID</button>
+        <button type="submit" class="w-full bg-cyan-600 hover:bg-cyan-500 font-bold py-2.5 rounded text-sm transition">SAVE & SYNC TO NETWORK</button>
       </form>
     </div>
 
     <!-- 4. Result / Success Card -->
     <div id="result-card" class="hidden bg-slate-800 p-6 rounded-xl border border-slate-700 shadow-xl text-center space-y-4">
       <div class="text-5xl">🎉</div>
-      <h3 class="text-xl font-bold text-emerald-400">Application Saved Successfully!</h3>
+      <h3 class="text-xl font-bold text-emerald-400">Application Broadcasted!</h3>
       <p class="text-sm text-slate-300">Your unique 5-letter Reference ID is:</p>
       
       <div id="generated-id" class="text-3xl font-mono font-bold tracking-widest text-amber-400 bg-slate-900 p-3 rounded-lg border border-slate-700 select-all">
@@ -135,7 +146,7 @@
       </div>
 
       <div class="text-xs text-slate-400 space-y-2 pt-2">
-        <p>Aap is URL link ko copy karke browser mein check kar sakte hain:</p>
+        <p>Aap is URL link ko Kisi ke saath bhi share kar sakte hain:</p>
         <div id="user-url" class="p-2 bg-slate-900 rounded font-mono text-emerald-300 break-all select-all"></div>
       </div>
 
@@ -150,7 +161,7 @@
       </div>
 
       <div id="detail-content" class="space-y-3 text-sm">
-        <!-- JS se details yahan append honge -->
+        <!-- JS details -->
       </div>
 
       <button onclick="showSelection()" class="w-full bg-slate-700 hover:bg-slate-600 text-sm font-semibold py-2 rounded mt-4">Close View</button>
@@ -160,7 +171,7 @@
     <div id="not-found" class="hidden bg-slate-800 p-6 rounded-xl border border-red-500/50 text-center space-y-4">
       <div class="text-5xl">⚠️</div>
       <h3 class="text-xl font-bold text-red-400">ID Not Found</h3>
-      <p class="text-sm text-slate-300">Aapki dakhil karda Application ID system mein majood nahi hai.</p>
+      <p class="text-sm text-slate-300">Aapki dakhil karda Application ID network mein majood nahi hai.</p>
       <button onclick="showSelection()" class="bg-slate-700 hover:bg-slate-600 text-sm font-semibold px-4 py-2 rounded">Go Home</button>
     </div>
 
@@ -168,24 +179,29 @@
 
   <!-- Footer -->
   <footer class="text-center p-4 text-xs text-slate-500 border-t border-slate-800">
-    &copy; 2026 Prime Scheme Portal. All Rights Reserved.
+    &copy; 2026 Prime Scheme Portal (Gun.js Peer-to-Peer Enabled)
   </footer>
 
   <!-- JavaScript Logic -->
   <script>
-    // System Data Manager (Local storage + JSON File)
-    const STORAGE_KEY = 'scheme_applications_db';
+    // Initialize Gun DB with Public Peer Relays for global WebRTC discovery
+    const gun = Gun([
+      'https://gun-manhattan.herokuapp.com/gun',
+      'https://peer.walland.one/gun'
+    ]);
+    
+    // Global P2P DB Reference Node
+    const db = gun.get('prime_scheme_2026_network_db');
 
-    function getStoredData() {
-      const data = localStorage.getItem(STORAGE_KEY);
-      return data ? JSON.parse(data) : [];
-    }
+    // Local In-Memory Cache for fast lookup & JSON Export
+    const localNetworkCache = {};
 
-    function saveData(record) {
-      const currentData = getStoredData();
-      currentData.push(record);
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(currentData));
-    }
+    // Live Sync Listeners across Mesh
+    db.map().on((data, key) => {
+      if (data && data.id) {
+        localNetworkCache[data.id.toUpperCase()] = data;
+      }
+    });
 
     // 5-Letter ID Generator
     function generate5ID() {
@@ -197,7 +213,7 @@
       return result;
     }
 
-    // Screen Management
+    // Navigation logic
     function hideAll() {
       document.getElementById('selection-screen').classList.add('hidden');
       document.getElementById('laptop-form').classList.add('hidden');
@@ -223,7 +239,13 @@
       document.getElementById('bike-form').classList.remove('hidden');
     }
 
-    // Handlers for Form Submission
+    // Save Data directly into Gun.js Peer Graph
+    function saveToMesh(record) {
+      localNetworkCache[record.id.toUpperCase()] = record;
+      db.get(record.id.toUpperCase()).put(record);
+    }
+
+    // Form Handlers
     function handleLaptopSubmit(e) {
       e.preventDefault();
       const id = generate5ID();
@@ -241,7 +263,7 @@
         createdAt: new Date().toLocaleString()
       };
 
-      saveData(record);
+      saveToMesh(record);
       showSuccessCard(id);
     }
 
@@ -260,7 +282,7 @@
         createdAt: new Date().toLocaleString()
       };
 
-      saveData(record);
+      saveToMesh(record);
       showSuccessCard(id);
     }
 
@@ -272,22 +294,29 @@
       document.getElementById('result-card').classList.remove('hidden');
     }
 
-    // URL Hash Routing (#id=11111)
+    // Search manually or via Hash Route
+    function searchID() {
+      const query = document.getElementById('search-id-input').value.trim().toUpperCase();
+      if (query) {
+        window.location.hash = `id=${query}`;
+      }
+    }
+
     function checkHashRoute() {
       const hash = window.location.hash;
       if (hash.startsWith('#id=')) {
         const queryId = hash.replace('#id=', '').trim().toUpperCase();
         if (!queryId) return;
 
-        const allData = getStoredData();
-        const userRecord = allData.find(item => item.id.toUpperCase() === queryId);
-
-        hideAll();
-        if (userRecord) {
-          renderDetailPage(userRecord);
-        } else {
-          document.getElementById('not-found').classList.remove('hidden');
-        }
+        // Fetch from Mesh directly if not in local cache yet
+        db.get(queryId).once((userRecord) => {
+          hideAll();
+          if (userRecord && userRecord.id) {
+            renderDetailPage(userRecord);
+          } else {
+            document.getElementById('not-found').classList.remove('hidden');
+          }
+        });
       }
     }
 
@@ -361,14 +390,13 @@
       document.getElementById('detail-page').classList.remove('hidden');
     }
 
-    // JSON Downloader for Admin/Database check
+    // JSON Downloader
     function downloadJSON() {
-      const data = getStoredData();
-      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+      const blob = new Blob([JSON.stringify(Object.values(localNetworkCache), null, 2)], { type: 'application/json' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = 'data.json';
+      a.download = 'synced_data.json';
       a.click();
       URL.revokeObjectURL(url);
     }
