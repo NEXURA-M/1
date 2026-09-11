@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Free Laptop & Bike Scheme</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+  </style>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col justify-between">
+
+  <!-- Header -->
+  <header class="bg-slate-800 border-b border-slate-700 p-4 text-center shadow-lg">
+    <h1 class="text-2xl font-bold text-emerald-400 cursor-pointer" onclick="showSelection()">Prime Welfare Scheme 2026</h1>
+    <p class="text-slate-400 text-sm mt-1">Apply for Free Laptop & Free Bike Program</p>
+  </header>
+
+  <!-- Main Container -->
+  <main class="container mx-auto p-4 max-w-lg my-auto">
+    
+    <!-- 1. Selection Screen (Home) -->
+    <div id="selection-screen" class="space-y-6 text-center">
+      <h2 class="text-xl font-semibold mb-4">Choose a Scheme to Apply</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <!-- Laptop Button -->
+        <button onclick="openLaptopForm()" class="bg-slate-800 hover:bg-slate-700 border-2 border-emerald-500 rounded-xl p-6 transition duration-200 shadow-xl flex flex-col items-center justify-center group">
+          <span class="text-4xl mb-2">💻</span>
+          <span class="text-lg font-bold text-emerald-400 group-hover:scale-105 transition">Apply for LAPTOP</span>
+          <span class="text-xs bg-emerald-500/20 text-emerald-300 px-2 py-1 rounded mt-2">(FREE)</span>
+        </button>
+
+        <!-- Bike Button -->
+        <button onclick="openBikeForm()" class="bg-slate-800 hover:bg-slate-700 border-2 border-cyan-500 rounded-xl p-6 transition duration-200 shadow-xl flex flex-col items-center justify-center group">
+          <span class="text-4xl mb-2">🏍️</span>
+          <span class="text-lg font-bold text-cyan-400 group-hover:scale-105 transition">Apply for BIKE</span>
+          <span class="text-xs bg-cyan-500/20 text-cyan-300 px-2 py-1 rounded mt-2">(FREE)</span>
+        </button>
+      </div>
+      
+      <!-- Export JSON File Button -->
+      <div class="mt-8 pt-6 border-t border-slate-800">
+        <button onclick="downloadJSON()" class="text-xs text-slate-400 hover:text-white underline">
+          📥 Download data.json Archive
+        </button>
+      </div>
+    </div>
+
+    <!-- 2. Laptop Form -->
+    <div id="laptop-form" class="hidden bg-slate-800 p-6 rounded-xl border border-slate-700 shadow-xl">
+      <div class="flex justify-between items-center mb-4">
+        <h3 class="text-xl font-bold text-emerald-400">💻 Laptop Application</h3>
+        <button onclick="showSelection()" class="text-sm text-slate-400 hover:text-white">← Back</button>
+      </div>
+      
+      <form onsubmit="handleLaptopSubmit(event)" class="space-y-4">
+        <div>
+          <label class="block text-xs text-slate-400 mb-1">Full Name</label>
+          <input type="text" id="laptop-name" required class="w-full bg-slate-900 border border-slate-700 rounded p-2 text-sm focus:border-emerald-500 outline-none">
+        </div>
+        
+        <div>
+          <label class="block text-xs text-slate-400 mb-1">Father Name</label>
+          <input type="text" id="laptop-fname" required class="w-full bg-slate-900 border border-slate-700 rounded p-2 text-sm focus:border-emerald-500 outline-none">
+        </div>
+
+        <div>
+          <label class="block text-xs text-slate-400 mb-1">Age</label>
+          <input type="number" id="laptop-age" required class="w-full bg-slate-900 border border-slate-700 rounded p-2 text-sm focus:border-emerald-500 outline-none">
+        </div>
+
+        <div>
+          <label class="block text-xs text-slate-400 mb-1">Computer Specialist / Program</label>
+          <input type="text" id="laptop-program" placeholder="e.g. Web Development, AI Development, or any custom program" required class="w-full bg-slate-900 border border-slate-700 rounded p-2 text-sm focus:border-emerald-500 outline-none">
+        </div>
+
+        <div>
+          <label class="block text-xs text-slate-400 mb-1">Nexura / Top Courses Certificate ID</label>
+          <input type="text" id="laptop-cert" required class="w-full bg-slate-900 border border-slate-700 rounded p-2 text-sm focus:border-emerald-500 outline-none">
+        </div>
+
+        <div class="p-3 bg-emerald-950/40 border border-emerald-500/30 rounded-lg">
+          <p class="text-xs text-emerald-300 font-semibold mb-1">MSID Payment Fee: Rs. 500</p>
+          <label class="block text-xs text-slate-400 mb-1">Enter MSID Transaction ID</label>
+          <input type="text" id="laptop-msid" placeholder="Transaction TRX / MSID" required class="w-full bg-slate-900 border border-slate-700 rounded p-2 text-sm focus:border-emerald-500 outline-none">
+        </div>
+
+        <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-500 font-bold py-2.5 rounded text-sm transition">SAVE & GENERATE ID</button>
+      </form>
+    </div>
+
+    <!-- 3. Bike Form -->
+    <div id="bike-form" class="hidden bg-slate-800 p-6 rounded-xl border border-slate-700 shadow-xl">
+      <div class="flex justify-between items-center mb-4">
+        <h3 class="text-xl font-bold text-cyan-400">🏍️ Bike Application</h3>
+        <button onclick="showSelection()" class="text-sm text-slate-400 hover:text-white">← Back</button>
+      </div>
+      
+      <form onsubmit="handleBikeSubmit(event)" class="space-y-4">
+        <div>
+          <label class="block text-xs text-slate-400 mb-1">Full Name</label>
+          <input type="text" id="bike-name" required class="w-full bg-slate-900 border border-slate-700 rounded p-2 text-sm focus:border-cyan-500 outline-none">
+        </div>
+        
+        <div>
+          <label class="block text-xs text-slate-400 mb-1">Father Name</label>
+          <input type="text" id="bike-fname" required class="w-full bg-slate-900 border border-slate-700 rounded p-2 text-sm focus:border-cyan-500 outline-none">
+        </div>
+
+        <div>
+          <label class="block text-xs text-slate-400 mb-1">Licence ID</label>
+          <input type="text" id="bike-licence" required class="w-full bg-slate-900 border border-slate-700 rounded p-2 text-sm focus:border-cyan-500 outline-none">
+        </div>
+
+        <div class="p-3 bg-cyan-950/40 border border-cyan-500/30 rounded-lg">
+          <p class="text-xs text-cyan-300 font-semibold mb-1">MSID Payment Fee: Rs. 1000</p>
+          <label class="block text-xs text-slate-400 mb-1">Enter MSID Transaction ID</label>
+          <input type="text" id="bike-msid" placeholder="Transaction TRX / MSID" required class="w-full bg-slate-900 border border-slate-700 rounded p-2 text-sm focus:border-cyan-500 outline-none">
+        </div>
+
+        <button type="submit" class="w-full bg-cyan-600 hover:bg-cyan-500 font-bold py-2.5 rounded text-sm transition">SAVE & GENERATE ID</button>
+      </form>
+    </div>
+
+    <!-- 4. Result / Success Card -->
+    <div id="result-card" class="hidden bg-slate-800 p-6 rounded-xl border border-slate-700 shadow-xl text-center space-y-4">
+      <div class="text-5xl">🎉</div>
+      <h3 class="text-xl font-bold text-emerald-400">Application Saved Successfully!</h3>
+      <p class="text-sm text-slate-300">Your unique 5-letter Reference ID is:</p>
+      
+      <div id="generated-id" class="text-3xl font-mono font-bold tracking-widest text-amber-400 bg-slate-900 p-3 rounded-lg border border-slate-700 select-all">
+        -----
+      </div>
+
+      <div class="text-xs text-slate-400 space-y-2 pt-2">
+        <p>Aap is URL link ko copy karke browser mein check kar sakte hain:</p>
+        <div id="user-url" class="p-2 bg-slate-900 rounded font-mono text-emerald-300 break-all select-all"></div>
+      </div>
+
+      <button onclick="showSelection()" class="w-full bg-slate-700 hover:bg-slate-600 text-sm font-semibold py-2 rounded">Go Back to Home</button>
+    </div>
+
+    <!-- 5. User Details Screen (#id=XXXXX) -->
+    <div id="detail-page" class="hidden bg-slate-800 p-6 rounded-xl border border-slate-700 shadow-2xl space-y-4">
+      <div class="border-b border-slate-700 pb-3 flex justify-between items-center">
+        <h3 class="text-lg font-bold text-white">Application Details</h3>
+        <span id="detail-type-tag" class="text-xs px-2 py-1 rounded font-bold"></span>
+      </div>
+
+      <div id="detail-content" class="space-y-3 text-sm">
+        <!-- JS se details yahan append honge -->
+      </div>
+
+      <button onclick="showSelection()" class="w-full bg-slate-700 hover:bg-slate-600 text-sm font-semibold py-2 rounded mt-4">Close View</button>
+    </div>
+
+    <!-- 6. Not Found Screen -->
+    <div id="not-found" class="hidden bg-slate-800 p-6 rounded-xl border border-red-500/50 text-center space-y-4">
+      <div class="text-5xl">⚠️</div>
+      <h3 class="text-xl font-bold text-red-400">ID Not Found</h3>
+      <p class="text-sm text-slate-300">Aapki dakhil karda Application ID system mein majood nahi hai.</p>
+      <button onclick="showSelection()" class="bg-slate-700 hover:bg-slate-600 text-sm font-semibold px-4 py-2 rounded">Go Home</button>
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="text-center p-4 text-xs text-slate-500 border-t border-slate-800">
+    &copy; 2026 Prime Scheme Portal. All Rights Reserved.
+  </footer>
+
+  <!-- JavaScript Logic -->
+  <script>
+    // System Data Manager (Local storage + JSON File)
+    const STORAGE_KEY = 'scheme_applications_db';
+
+    function getStoredData() {
+      const data = localStorage.getItem(STORAGE_KEY);
+      return data ? JSON.parse(data) : [];
+    }
+
+    function saveData(record) {
+      const currentData = getStoredData();
+      currentData.push(record);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(currentData));
+    }
+
+    // 5-Letter ID Generator
+    function generate5ID() {
+      const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+      let result = '';
+      for (let i = 0; i < 5; i++) {
+        result += chars.charAt(Math.floor(Math.random() * chars.length));
+      }
+      return result;
+    }
+
+    // Screen Management
+    function hideAll() {
+      document.getElementById('selection-screen').classList.add('hidden');
+      document.getElementById('laptop-form').classList.add('hidden');
+      document.getElementById('bike-form').classList.add('hidden');
+      document.getElementById('result-card').classList.add('hidden');
+      document.getElementById('detail-page').classList.add('hidden');
+      document.getElementById('not-found').classList.add('hidden');
+    }
+
+    function showSelection() {
+      window.location.hash = '';
+      hideAll();
+      document.getElementById('selection-screen').classList.remove('hidden');
+    }
+
+    function openLaptopForm() {
+      hideAll();
+      document.getElementById('laptop-form').classList.remove('hidden');
+    }
+
+    function openBikeForm() {
+      hideAll();
+      document.getElementById('bike-form').classList.remove('hidden');
+    }
+
+    // Handlers for Form Submission
+    function handleLaptopSubmit(e) {
+      e.preventDefault();
+      const id = generate5ID();
+      
+      const record = {
+        id: id,
+        type: 'Laptop Scheme',
+        name: document.getElementById('laptop-name').value,
+        fatherName: document.getElementById('laptop-fname').value,
+        age: document.getElementById('laptop-age').value,
+        program: document.getElementById('laptop-program').value,
+        certificateId: document.getElementById('laptop-cert').value,
+        msid: document.getElementById('laptop-msid').value,
+        feePaid: '500 PKR',
+        createdAt: new Date().toLocaleString()
+      };
+
+      saveData(record);
+      showSuccessCard(id);
+    }
+
+    function handleBikeSubmit(e) {
+      e.preventDefault();
+      const id = generate5ID();
+
+      const record = {
+        id: id,
+        type: 'Bike Scheme',
+        name: document.getElementById('bike-name').value,
+        fatherName: document.getElementById('bike-fname').value,
+        licenceId: document.getElementById('bike-licence').value,
+        msid: document.getElementById('bike-msid').value,
+        feePaid: '1000 PKR',
+        createdAt: new Date().toLocaleString()
+      };
+
+      saveData(record);
+      showSuccessCard(id);
+    }
+
+    function showSuccessCard(id) {
+      hideAll();
+      document.getElementById('generated-id').innerText = id;
+      const fullUrl = `${window.location.origin}${window.location.pathname}#id=${id}`;
+      document.getElementById('user-url').innerText = fullUrl;
+      document.getElementById('result-card').classList.remove('hidden');
+    }
+
+    // URL Hash Routing (#id=11111)
+    function checkHashRoute() {
+      const hash = window.location.hash;
+      if (hash.startsWith('#id=')) {
+        const queryId = hash.replace('#id=', '').trim().toUpperCase();
+        if (!queryId) return;
+
+        const allData = getStoredData();
+        const userRecord = allData.find(item => item.id.toUpperCase() === queryId);
+
+        hideAll();
+        if (userRecord) {
+          renderDetailPage(userRecord);
+        } else {
+          document.getElementById('not-found').classList.remove('hidden');
+        }
+      }
+    }
+
+    function renderDetailPage(data) {
+      const container = document.getElementById('detail-content');
+      const tag = document.getElementById('detail-type-tag');
+      
+      if (data.type === 'Laptop Scheme') {
+        tag.innerText = 'LAPTOP SCHEME';
+        tag.className = 'text-xs px-2 py-1 rounded font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30';
+      } else {
+        tag.innerText = 'BIKE SCHEME';
+        tag.className = 'text-xs px-2 py-1 rounded font-bold bg-cyan-500/20 text-cyan-400 border border-cyan-500/30';
+      }
+
+      let htmlDetails = `
+        <div class="flex justify-between py-1 border-b border-slate-700/50">
+          <span class="text-slate-400">Application ID:</span>
+          <span class="font-mono font-bold text-amber-400">${data.id}</span>
+        </div>
+        <div class="flex justify-between py-1 border-b border-slate-700/50">
+          <span class="text-slate-400">Full Name:</span>
+          <span class="font-medium text-white">${data.name}</span>
+        </div>
+        <div class="flex justify-between py-1 border-b border-slate-700/50">
+          <span class="text-slate-400">Father Name:</span>
+          <span class="font-medium text-white">${data.fatherName}</span>
+        </div>
+      `;
+
+      if (data.type === 'Laptop Scheme') {
+        htmlDetails += `
+          <div class="flex justify-between py-1 border-b border-slate-700/50">
+            <span class="text-slate-400">Age:</span>
+            <span class="text-white">${data.age}</span>
+          </div>
+          <div class="flex justify-between py-1 border-b border-slate-700/50">
+            <span class="text-slate-400">Program / Specialist:</span>
+            <span class="text-emerald-300 font-semibold">${data.program}</span>
+          </div>
+          <div class="flex justify-between py-1 border-b border-slate-700/50">
+            <span class="text-slate-400">Certificate ID:</span>
+            <span class="font-mono text-slate-200">${data.certificateId}</span>
+          </div>
+        `;
+      } else if (data.type === 'Bike Scheme') {
+        htmlDetails += `
+          <div class="flex justify-between py-1 border-b border-slate-700/50">
+            <span class="text-slate-400">Licence ID:</span>
+            <span class="font-mono text-cyan-300">${data.licenceId}</span>
+          </div>
+        `;
+      }
+
+      htmlDetails += `
+        <div class="flex justify-between py-1 border-b border-slate-700/50">
+          <span class="text-slate-400">MSID TRX:</span>
+          <span class="font-mono text-slate-200">${data.msid}</span>
+        </div>
+        <div class="flex justify-between py-1 border-b border-slate-700/50">
+          <span class="text-slate-400">Fee Amount:</span>
+          <span class="text-slate-200">${data.feePaid}</span>
+        </div>
+        <div class="flex justify-between py-1">
+          <span class="text-slate-400">Submitted Date:</span>
+          <span class="text-xs text-slate-400">${data.createdAt}</span>
+        </div>
+      `;
+
+      container.innerHTML = htmlDetails;
+      document.getElementById('detail-page').classList.remove('hidden');
+    }
+
+    // JSON Downloader for Admin/Database check
+    function downloadJSON() {
+      const data = getStoredData();
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'data.json';
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    // Initialize Event Listeners
+    window.addEventListener('hashchange', checkHashRoute);
+    window.addEventListener('load', checkHashRoute);
+  </script>
+</body>
+</html>
